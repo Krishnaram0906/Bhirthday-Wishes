@@ -27,6 +27,37 @@
         100% { background-position: 0% 50%; }
     }
 
+    /* Music Button */
+    #musicBtn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: linear-gradient(45deg, #ff6b6b, #feca57);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease;
+    }
+
+    #musicBtn:hover {
+        transform: scale(1.1);
+    }
+
+    #musicBtn.playing {
+        animation: musicPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes musicPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
     /* Floating balloons background */
     .balloon {
         position: fixed;
@@ -291,10 +322,23 @@
         .card { padding: 30px 20px; }
         .name { font-size: 1.6rem; }
         .message { font-size: 1rem; }
+        #musicBtn {
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            top: 10px;
+            right: 10px;
+        }
     }
 </style>
 </head>
 <body>
+
+<!-- Background Music -->
+<audio id="bgMusic" loop>
+    <source src="birthday-song.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" onclick="toggleMusic()">🔇 Play Music</button>
 
 <div class="container">
     <div class="card">
@@ -306,7 +350,7 @@
             <img src="friend-photo.jpg" alt="Friend's Photo" class="friend-image" onerror="this.src='https://via.placeholder.com/220/feca57/ffffff?text=Photo+Here'">
         </div>
 
-        <div class="name">Dear [Friend's Name] 🌟</div>
+        <div class="name">Dear [Vishnu Kumar] 🌟</div>
 
         <p class="message">
             Wishing you a day filled with love, laughter, and every happiness your heart can hold! 
@@ -330,7 +374,25 @@
 </div>
 
 <script>
-    // Create floating balloons
+    // ===== MUSIC PLAYER =====
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    let isPlaying = false;
+
+    function toggleMusic() {
+        if (isPlaying) {
+            bgMusic.pause();
+            musicBtn.innerHTML = '🔇 Play Music';
+            musicBtn.classList.remove('playing');
+        } else {
+            bgMusic.play();
+            musicBtn.innerHTML = '🎵 Pause Music';
+            musicBtn.classList.add('playing');
+        }
+        isPlaying = !isPlaying;
+    }
+
+    // ===== BALLOONS =====
     function createBalloons() {
         const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#1dd1a1', '#f368e0'];
         for (let i = 0; i < 15; i++) {
@@ -344,7 +406,7 @@
         }
     }
 
-    // Confetti burst function
+    // ===== CONFETTI =====
     function celebrate() {
         const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#1dd1a1', '#f368e0', '#ee5253'];
         const confettiCount = 100;
@@ -361,24 +423,29 @@
 
             setTimeout(() => confetti.remove(), 4000);
         }
-
-        // Play a little "pop" effect on button
-        playSound();
     }
 
-    // Optional sound effect (uncomment and add your own audio file)
-    function playSound() {
-        // const audio = new Audio('celebration-sound.mp3');
-        // audio.play();
-    }
-
-    // Auto celebrate on load
+    // ===== ON LOAD =====
     window.onload = function() {
         createBalloons();
         setTimeout(celebrate, 800);
+
+        // Try autoplay music (may be blocked by browser)
+        bgMusic.volume = 0.5;
+        const playPromise = bgMusic.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                isPlaying = true;
+                musicBtn.innerHTML = '🎵 Pause Music';
+                musicBtn.classList.add('playing');
+            }).catch(() => {
+                console.log('Autoplay blocked - waiting for user to click play button');
+            });
+        }
     };
 
-    // Repeat confetti burst every few seconds for extra fun
+    // ===== REPEAT CONFETTI EVERY 8 SECONDS =====
     setInterval(() => {
         const smallBurst = 30;
         const colors = ['#ff6b6b', '#feca57', '#48dbfb'];
