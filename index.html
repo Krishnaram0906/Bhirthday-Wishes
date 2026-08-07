@@ -329,6 +329,21 @@
             right: 10px;
         }
     }
+   .button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.surprise-btn {
+    background: linear-gradient(45deg, #a855f7, #ec4899);
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+}
+
+.surprise-btn:hover {
+    box-shadow: 0 12px 25px rgba(168, 85, 247, 0.6);
 </style>
 </head>
 <body>
@@ -361,7 +376,10 @@
             "Another year older, another year wiser, another year of being absolutely amazing!"
         </p>
 
-        <button class="cake-btn" onclick="celebrate()">🎉 Celebrate! 🎉</button>
+       <div class="button-group">
+    <button class="cake-btn" onclick="celebrate()">🎉 Celebrate! 🎉</button>
+    <button class="cake-btn surprise-btn" onclick="window.location.href='surprise.html'">🎁 Surprise! 🎁</button>
+</div>
 
         <div class="emojis-row">
             <span>🎈</span>
